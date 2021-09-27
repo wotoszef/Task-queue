@@ -77,8 +77,6 @@ const MainPage = () => {
     }
   };
 
-  console.log(onGoingTask, "onGoing");
-
   const taskList = useMemo(() => {
     if (tasksDetails.length > 0) {
       return sortTask.map((task: SingleTask, index: number) => {
@@ -140,6 +138,17 @@ const MainPage = () => {
     }
   }, [finishedTasks]);
 
+  const findTaskIndex = useMemo(() => {
+    if (tasksDetails.length > 0) {
+      const sortedIndex = tasksDetails.findIndex((task: SingleTask) => {
+        return task.id === sortTask[0].id;
+      });
+      if (sortedIndex !== -1) {
+        return sortedIndex;
+      }
+    }
+  }, [tasksDetails, sortTask]);
+
   useEffect(() => {
     if (queue.length > 0 && onGoingTask.length < 1) {
       dispatch(setOngoingTask(queue[0]));
@@ -156,17 +165,6 @@ const MainPage = () => {
       }, onGoingTask[0].time * 1000);
     }
   }, [onGoingTask, dispatch]);
-
-  const findTaskIndex = useMemo(() => {
-    if (tasksDetails.length > 0) {
-      const sortedIndex = tasksDetails.findIndex((task: SingleTask) => {
-        return task.id === sortTask[0].id;
-      });
-      if (sortedIndex !== -1) {
-        return sortedIndex;
-      }
-    }
-  }, [tasksDetails, sortTask]);
 
   return (
     <Container>
